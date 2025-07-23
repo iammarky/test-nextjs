@@ -26,6 +26,14 @@ export const recipeApi = createApi({
       }),
       invalidatesTags: ['Recipe'],
     }),
+    patchFavorite: builder.mutation<Recipe, { id: string; isFavorite: boolean }>({
+      query: ({ id, isFavorite }) => ({
+        url: `recipe/${id}`,
+        method: 'PATCH',
+        body: { isFavorite },
+      }),
+      invalidatesTags: ['Recipe'],
+    }),
     deleteRecipe: builder.mutation<{ success: boolean; id: string }, string>({
       query: (id) => ({
         url: `recipes/${id}`,
@@ -40,5 +48,6 @@ export const {
   useGetRecipesQuery,
   useAddRecipeMutation,
   useUpdateRecipeMutation,
+  usePatchFavoriteMutation,
   useDeleteRecipeMutation,
 } = recipeApi;

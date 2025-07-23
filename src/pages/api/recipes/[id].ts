@@ -40,6 +40,24 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return res.status(200).json(updated);
     }
 
+    case 'PATCH': {
+      const { isFavorite } = req.body;
+      const recipes = readData();
+      const index = recipes.findIndex(r => r.id === id);
+
+      if (index === -1) {
+        return res.status(404).json({ error: 'Recipe not found' });
+      }
+
+      if (typeof isFavorite !== 'boolean') {
+        return res.status(400).json({ error: 'isFavorite must be a boolean' });
+      }
+
+      recipes[index].isFavorite = isFavorite;
+      writeData(recipes);
+      return res.status(200).json(recipes[index]);
+    }
+
     case 'DELETE': {
       const recipes = readData();
       const newRecipes = recipes.filter(r => r.id !== id);
