@@ -4,7 +4,6 @@ import {
   filterOptions,
   sortOptions,
   sortConfig,
-  type SortKey,
   type SortOrder,
   type YesNo,
 } from '@/utils/constants';
@@ -47,9 +46,9 @@ const Sidebar = ({ disabled }: { disabled?: boolean }) => {
             )}
           </div>
           <Dropdown
-            value={sortState[key]}
-            onChange={(val) =>
-              dispatch(setSort({ key, order: val as SortOrder }))
+            value={sortState[key] as SortOrder}
+            onChange={(val: SortOrder) =>
+              dispatch(setSort({ key, order: val }))
             }
             options={sortOptions}
             placeholder="Select"

@@ -6,6 +6,7 @@ interface Recipe {
   description: string;
   author: string;
   createdAt: string;
+  [key: string]: any;
 };
 
 export type {

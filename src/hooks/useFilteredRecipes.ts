@@ -1,40 +1,46 @@
 import { useMemo } from 'react';
-import { sortConfig, type SortOrder, type YesNo, type SortKey } from '@/utils/constants';
-import { getValue, compareValues } from '@/utils/helpers';
+import { sortConfig, type SortKey, type SortOrder, type YesNo } from '@/utils/constants';
+import { compareValues, getValue } from '@/utils/helpers';
+import type { Recipe } from '@/utils/interface';
 
-type Recipe = {
-  id: string;
-  image: string;
-  isFavorite: boolean;
-  title: string;
-  description: string;
-  author: string;
-  createdAt: string;
-};
-
-type UseFilteredRecipesProps = {
+type Props = {
   recipes: Recipe[];
   filter: YesNo;
   sortState: Partial<Record<SortKey, SortOrder>>;
+  searchTerm?: string;
 };
 
-export function useFilteredRecipes({ recipes, filter, sortState }: UseFilteredRecipesProps) {
+export function useFilteredRecipes({ recipes, filter, sortState, searchTerm = '' }: Props) {
   return useMemo(() => {
     let result = [...recipes];
 
+    // Apply filter
     if (filter) {
-      result = result.filter(r =>
-        filter === 'yes' ? r.isFavorite : !r.isFavorite
+      result = result.filter((r) => (filter === 'yes' ? r.isFavorite : !r.isFavorite));
+    }
+
+    // Apply search
+    if (searchTerm.trim()) {
+      const lower = searchTerm.trim().toLowerCase();
+      result = result.filter((r) =>
+        r.title.toLowerCase().includes(lower) ||
+        r.author.toLowerCase().includes(lower)
       );
     }
 
-    const active = sortConfig.find(({ key }) => sortState[key]);
-    if (active) {
-      const { key } = active;
-      const dir = sortState[key]!;
-      result.sort((a, b) => compareValues(getValue(a, key), getValue(b, key), dir));
+    // Apply sort
+    const activeSort = sortConfig.find(({ key }) => sortState[key]);
+    if (activeSort) {
+      const { key } = activeSort;
+      const dir = sortState[key];
+
+      if (dir === 'asc' || dir === 'desc') {
+        result.sort((a, b) =>
+          compareValues(getValue(a, key), getValue(b, key), dir)
+        );
+      }
     }
 
     return result;
-  }, [recipes, filter, sortState]);
+  }, [recipes, filter, sortState, searchTerm]);
 }
