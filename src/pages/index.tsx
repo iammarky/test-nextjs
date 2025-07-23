@@ -64,7 +64,7 @@ export default function Home() {
           onChange={(e) => dispatch(setSearch(e.target.value))}
           placeholder="Search here..."
         />
-      } />
+      }/>
       <div className="flex flex-1 h-0">
         <Sidebar disabled={recipes.length === 0} />
         <RecipeList recipes={filteredRecipes} />
