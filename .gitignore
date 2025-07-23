@@ -1,0 +1,46 @@
+# Next.js build output
+.next/
+out/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-lock.yaml
+package-lock.json
+
+# Optional: lock only one of the above if you're using a specific package manager
+# e.g. keep `pnpm-lock.yaml` and ignore others
+
+# Environment variables
+.env
+.env.*.local
+
+# Logs
+logs
+*.log
+*.log.*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+
+# Testing
+coverage/
+jest-cache/
+.nyc_output/
+
+# TypeScript
+*.tsbuildinfo
+
+# Static file cache (Next.js)
+.cache/
+
+# Remove or comment this line to include .DS_Store
+.DS_Store
