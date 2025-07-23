@@ -33,6 +33,7 @@ const recipes = [
   },
 ];
 
+
 export default function Home() {
   return (
     <>
@@ -46,15 +47,23 @@ export default function Home() {
 
           {/* Content (Recipe List) */}
           <section className="relative flex-1 w-full p-8">
-              <img 
-                src="/plus.svg" 
-                alt="add icon" 
-                className="absolute top-12 right-12 w-[71px] h-[71px] z-10 cursor-pointer"
-              />
-            <div className="bg-white rounded-[10px] h-full p-5 overflow-auto shadow-md hide-scrollbar">
-              {recipes.map((recipe, idx) => (
-                <RecipeCard {...recipe} key={recipe.id}/>
-              ))}
+            <img 
+              src="/plus.svg" 
+              alt="add icon" 
+              className="absolute top-12 right-12 w-[71px] h-[71px] z-10 cursor-pointer"
+            />
+            <div className="bg-white rounded-[10px] h-full p-5 shadow-md">
+              {recipes?.length === 0 ? (
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-[49px] font-semibold text-center m-0">No Record Found!</p>
+                </div>
+              ) : (
+                <div className="h-full overflow-auto hide-scrollbar space-y-4">
+                  {recipes.map((recipe) => (
+                    <RecipeCard key={recipe.id} {...recipe} />
+                  ))}
+                </div>
+              )}
             </div>
           </section>
         </div>  
