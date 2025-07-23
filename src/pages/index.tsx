@@ -1,100 +1,99 @@
-import { useState } from 'react';
+import { useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Header, Input, RecipeCard, Dropdown, ToggleOptions } from '@/components';
-
-type YesNo = typeof options[number]['value'];
-type SortOrder = typeof sortOptions[number]['value'];
+import { RootState, setSort, setFilter, clearFilter, clearSort } from '@/redux';
+import { filterOptions, sortOptions, sortConfig, type SortKey, type SortOrder, type YesNo } from '@/utils/constants';
+import { useFilteredRecipes } from '@/hooks/useFilteredRecipes';
 
 const recipes = [
   {
     id: '1',
     image: 'https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/chicken_curry_61994_16x9.jpg',
     isFavorite: false,
-    title: 'Title',
-    description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry...',
-    author: 'Johnny',
-    createdAt: 'March 6, 2024',
+    title: 'Chicken Tinola',
+    description: 'Lorem Ipsum...',
+    author: 'Mark',
+    createdAt: 'March 1, 2024',
   },
   {
     id: '2',
     image: 'https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/chicken_curry_61994_16x9.jpg',
     isFavorite: true,
-    title: 'Title',
-    description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry...',
+    title: 'Afritada',
+    description: 'Lorem Ipsum...',
     author: 'Johnny',
-    createdAt: 'March 6, 2024',
+    createdAt: 'March 5, 2024',
   },
   {
     id: '3',
     image: 'https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/chicken_curry_61994_16x9.jpg',
     isFavorite: false,
-    title: 'Title',
-    description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry...',
-    author: 'Johnny',
-    createdAt: 'March 6, 2024',
+    title: 'Caldereta',
+    description: 'Lorem Ipsum...',
+    author: 'Tony',
+    createdAt: 'March 10, 2024',
   },
 ];
 
-const sortOptions = [
-  { label: 'ASC', value: 'asc' },
-  { label: 'DESC', value: 'desc' },
-] as const;
-
-const options = [
-  { label: 'Yes', value: 'yes' },
-  { label: 'No', value: 'no' },
-] as const;
-
-
 export default function Home() {
-  const [sortTitle, setSortTitle] = useState<SortOrder | ''>('');
-  const [sortDate, setSortDate] = useState<SortOrder | ''>('');
-  const [sortAuthor, setSortAuthor] = useState<SortOrder | ''>('');
-  const [filter, setFilter] = useState<YesNo | ''>('');
+  const dispatch = useDispatch();
+  const sortState = useSelector((state: RootState) => state.recipes.sort);
+  const filter = useSelector((state: RootState) => state.recipes.filter);
+
+  const hasActiveSort = useMemo(
+    () => Object.values(sortState).some(Boolean),
+    [sortState]
+  );
+
+  const filteredRecipes = useFilteredRecipes({
+    recipes,
+    filter: filter as YesNo,
+    sortState: sortState as Partial<Record<SortKey, SortOrder>>,
+  });
 
   return (
     <main className="h-screen w-screen flex flex-col bg-[#EBEBEB] overflow-hidden">
       <Header right={<Input />} />
       <div className="flex flex-1 h-0">
         {/* Sidebar */}
-        <aside className={`w-[500px] p-8 space-y-6 transition-opacity duration-200 ${recipes.length === 0 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-          <div className="space-y-2">
-            <div className='flex justify-between items-center'>
-              <p className="text-[21px] font-semibold">Sort by Title</p>
+        <aside
+          className={`w-[500px] p-8 space-y-6 transition-opacity duration-200 ${
+            recipes.length === 0 ? 'opacity-0 pointer-events-none' : 'opacity-100'
+          }`}
+        >
+          {sortConfig.map(({ key, label }, index) => (
+            <div key={key} className="space-y-2">
+              <div className="flex justify-between items-center">
+                <p className="text-[21px] font-semibold">{label}</p>
+                {index === 0 && hasActiveSort && (
+                  <button
+                    className="text-blue-500 text-sm underline"
+                    onClick={() => dispatch(clearSort())}
+                  >
+                    Clear Sort
+                  </button>
+                )}
+              </div>
+              <Dropdown
+                value={sortState[key]}
+                onChange={(val) =>
+                  dispatch(setSort({ key, order: val as SortOrder }))
+                }
+                options={sortOptions}
+                placeholder="Select"
+              />
             </div>
-            <Dropdown
-              value={sortTitle}
-              onChange={setSortTitle}
-              options={sortOptions}
-              placeholder="Select"
-            />
-          </div>
+          ))}
+
+          {/* Filter */}
           <div className="space-y-2">
-            <div className='flex justify-between items-center'>
-              <p className="text-[21px] font-semibold">Sort by Date</p>
-            </div>
-            <Dropdown
-              value={sortDate}
-              onChange={setSortDate}
-              options={sortOptions}
-              placeholder="Select"
-            />
-          </div>
-          <div className="space-y-2">
-            <div className='flex justify-between items-center'>
-              <p className="text-[21px] font-semibold">Sort by Author</p>
-            </div>
-            <Dropdown
-              value={sortAuthor}
-              onChange={setSortAuthor}
-              options={sortOptions}
-              placeholder="Select"
-            />
-          </div>
-          <div className="space-y-2">
-            <div className='flex justify-between items-center'>
+            <div className="flex justify-between items-center">
               <p className="text-[21px] font-semibold">Filter</p>
               {filter && (
-                <p className='cursor-pointer text-blue-500' onClick={() => setFilter('')}>
+                <p
+                  className="cursor-pointer text-blue-500 text-sm"
+                  onClick={() => dispatch(clearFilter())}
+                >
                   Clear Filter
                 </p>
               )}
@@ -103,8 +102,8 @@ export default function Home() {
               <p className="text-[16px] font-semibold text-[#616161]">Favorites?</p>
               <ToggleOptions
                 value={filter}
-                onChange={setFilter}
-                options={options}
+                onChange={(val) => dispatch(setFilter(val as YesNo))}
+                options={filterOptions}
               />
             </div>
           </div>
@@ -112,22 +111,19 @@ export default function Home() {
 
         {/* Main Content */}
         <section className="relative flex-1 w-full p-8">
-          {/* Floating Add Button */}
           <img
             src="/plus.svg"
             alt="Add recipe"
-            aria-label="Add recipe"
             className="absolute top-12 right-12 w-[71px] h-[71px] z-10 cursor-pointer"
           />
-
           <div className="bg-white rounded-[10px] h-full p-5 shadow-md">
-            {recipes.length === 0 ? (
+            {filteredRecipes.length === 0 ? (
               <div className="flex items-center justify-center h-full">
                 <p className="text-[49px] font-semibold text-center">No Record Found!</p>
               </div>
             ) : (
               <div className="h-full overflow-auto hide-scrollbar space-y-4 pr-1">
-                {recipes.map((recipe) => (
+                {filteredRecipes.map((recipe) => (
                   <RecipeCard key={recipe.id} {...recipe} />
                 ))}
               </div>
