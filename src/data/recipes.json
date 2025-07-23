@@ -1,0 +1,11 @@
+[
+  {
+    "id": "6a1c865f-7775-4654-a170-bb3c97e4aca5",
+    "image": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/chicken_curry_61994_16x9.jpg",
+    "isFavorite": false,
+    "title": "Sample Chicken Curry",
+    "description": "Delicious Filipino-style chicken curry.",
+    "author": "Mark",
+    "createdAt": "July 23, 2025"
+  }
+]

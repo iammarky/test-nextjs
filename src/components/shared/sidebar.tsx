@@ -13,7 +13,7 @@ import {
   clearSort,
   setFilter,
   clearFilter,
-} from '@/redux';
+} from '@/redux/slices';
 import { useMemo } from 'react';
 
 const Sidebar = ({ disabled }: { disabled?: boolean }) => {

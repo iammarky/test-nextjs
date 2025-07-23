@@ -41,26 +41,28 @@ export default function RecipeCard({
           {/* Title and description */}
           <div>
             <h2 className="text-[32px] font-semibold">{title}</h2>
-            <p className="text-[15px] font-semibold line-clamp-4">
+            <p className="text-[15px] font-semibold line-clamp-4 max-w-[90%]">
               {description}
             </p>
-            {id && (
-              <p className="mt-2 cursor-pointer text-[12px] font-semibold">
-                See more
-              </p>
-            )}
-            
           </div>
 
           {/* Footer */}
-          <div className="flex justify-between text-[15px] font-semibold">
-            {author && (
-              <span>Added by: {author}</span>
+          <div className="space-y-2">
+            {id && (
+              <p className="cursor-pointer text-[12px] font-semibold">
+                See more
+              </p>
             )}
-            {createdAt && (
-              <span>Date: {createdAt}</span>
-            )}
+            <div className="flex justify-between text-[15px] font-semibold">
+              {author && (
+                <span>Added by: {author}</span>
+              )}
+              {createdAt && (
+                <span>Date: {createdAt}</span>
+              )}
+            </div>
           </div>
+          
         </div>
       </div>
     </div>
