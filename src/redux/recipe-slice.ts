@@ -18,6 +18,8 @@ const recipesSlice = createSlice({
   reducers: {
     setSort: (state, action: PayloadAction<{ key: keyof RecipesState['sort']; order: 'asc' | 'desc' | '' }>) => {
       const { key, order } = action.payload;
+      state.sort = {};  // Clear all previous sort keys
+      
       if (order) {
         state.sort[key] = order;
       } else {
