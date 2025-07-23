@@ -46,31 +46,64 @@ const options = [
 
 
 export default function Home() {
-  const [sort, setSort] = useState<SortOrder | ''>('');
-  const [value, setValue] = useState<YesNo | ''>('');
+  const [sortTitle, setSortTitle] = useState<SortOrder | ''>('');
+  const [sortDate, setSortDate] = useState<SortOrder | ''>('');
+  const [sortAuthor, setSortAuthor] = useState<SortOrder | ''>('');
+  const [filter, setFilter] = useState<YesNo | ''>('');
 
   return (
     <main className="h-screen w-screen flex flex-col bg-[#EBEBEB] overflow-hidden">
       <Header right={<Input />} />
       <div className="flex flex-1 h-0">
         {/* Sidebar */}
-        <aside className={`w-[500px] p-8 space-y-10 transition-opacity duration-200 ${recipes.length === 0 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+        <aside className={`w-[500px] p-8 space-y-6 transition-opacity duration-200 ${recipes.length === 0 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
           <div className="space-y-2">
-            <p className="text-[21px] font-semibold">Sort by Title</p>
+            <div className='flex justify-between items-center'>
+              <p className="text-[21px] font-semibold">Sort by Title</p>
+            </div>
             <Dropdown
-              value={sort}
-              onChange={setSort}
+              value={sortTitle}
+              onChange={setSortTitle}
               options={sortOptions}
               placeholder="Select"
             />
           </div>
           <div className="space-y-2">
-            <p className="text-[21px] font-semibold">Filter</p>
+            <div className='flex justify-between items-center'>
+              <p className="text-[21px] font-semibold">Sort by Date</p>
+            </div>
+            <Dropdown
+              value={sortDate}
+              onChange={setSortDate}
+              options={sortOptions}
+              placeholder="Select"
+            />
+          </div>
+          <div className="space-y-2">
+            <div className='flex justify-between items-center'>
+              <p className="text-[21px] font-semibold">Sort by Author</p>
+            </div>
+            <Dropdown
+              value={sortAuthor}
+              onChange={setSortAuthor}
+              options={sortOptions}
+              placeholder="Select"
+            />
+          </div>
+          <div className="space-y-2">
+            <div className='flex justify-between items-center'>
+              <p className="text-[21px] font-semibold">Filter</p>
+              {filter && (
+                <p className='cursor-pointer text-blue-500' onClick={() => setFilter('')}>
+                  Clear Filter
+                </p>
+              )}
+            </div>
             <div className="border border-black rounded-md p-4 bg-white space-y-4">
               <p className="text-[16px] font-semibold text-[#616161]">Favorites?</p>
               <ToggleOptions
-                value={value}
-                onChange={setValue}
+                value={filter}
+                onChange={setFilter}
                 options={options}
               />
             </div>
