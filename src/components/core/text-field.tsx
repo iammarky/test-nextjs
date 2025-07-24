@@ -38,7 +38,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
         >
           <input
             ref={ref}
-            className="flex-1 bg-transparent focus:outline-none text-gray-800 placeholder-gray-400"
+            className={`flex-1 bg-transparent focus:outline-none text-gray-800 placeholder-gray-400 ${
+              props.readOnly ? 'cursor-not-allowed' : 'cursor-text'
+            }`}
             {...props}
           />
           {iconSrc && (

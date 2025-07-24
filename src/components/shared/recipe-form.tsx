@@ -31,6 +31,7 @@ export default function RecipeForm({
               label={field.label}
               placeholder={field.placeholder}
               {...register(field.name as keyof RecipeFormValues)}
+              readOnly={field.name === 'title' && !isCreateMode} 
               errorMessage={errors[field.name as keyof RecipeFormValues]?.message}
               validation={errors[field.name as keyof RecipeFormValues] ? 'error' : undefined}
             />
