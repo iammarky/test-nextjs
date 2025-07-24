@@ -4,13 +4,13 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { recipeSchema, RecipeFormValues } from '@/utils/schema';
 import { Header, RecipeForm } from '@/components';
-import Image from 'next/image';
 import {
   useGetRecipeByIdQuery,
   useDeleteRecipeMutation,
   useUpdateRecipeMutation,
   useAddRecipeMutation,
 } from '@/redux';
+import { getImgSrc } from '@/utils/helpers';
 
 export default function Recipe() {
   const router = useRouter();
@@ -148,7 +148,7 @@ export default function Recipe() {
     <main className="h-screen w-screen flex flex-col bg-[#EBEBEB] overflow-hidden">
       <Header />
       <div className="flex flex-1 h-0">
-        <aside className="w-[500px] p-8 space-y-6 transition-opacity duration-200">
+        <aside className="w-[500px] py-8 pl-8 space-y-6 transition-opacity duration-200">
           <div className="space-y-2">
             <div
               className="flex space-x-1 items-center cursor-pointer"
@@ -165,13 +165,11 @@ export default function Recipe() {
               className="hidden"
               onChange={handleImageChange}
             />
-
-            <Image
-              src={imgSrc}
+            <img
+              suppressHydrationWarning
+              src={getImgSrc(imgSrc)}
               alt="preview"
-              width={457}
-              height={401}
-              className="object-cover rounded cursor-pointer"
+              className="object-cover w-[457px] h-[401px] rounded-[15px] cursor-pointer"
               onClick={handleImageClick}
               onError={() => setImgSrc('/svgs/image.svg')}
             />

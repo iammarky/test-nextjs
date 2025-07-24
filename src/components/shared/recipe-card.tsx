@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { usePatchFavoriteMutation } from '@/redux';
+import { getImgSrc } from '@/utils/helpers';
 
 type RecipeCardProps = {
   id: string;
@@ -34,7 +35,7 @@ export default function RecipeCard({
         {/* Left image section */}
         <div className="relative w-[310px] h-full">
           <Image
-            src={imgSrc}
+            src={getImgSrc(imgSrc)}
             alt={title}
             fill
             sizes="(max-width: 768px) 100vw, 310px"
