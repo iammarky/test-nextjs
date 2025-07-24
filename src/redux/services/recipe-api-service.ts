@@ -21,6 +21,7 @@ export const recipeApi = createApi({
         method: 'POST',
         body: data,
       }),
+      invalidatesTags: ['Recipe'],
     }),
     updateRecipe: builder.mutation<Recipe, { id: string; updates: Partial<Recipe> }>({
       query: ({ id, updates }) => ({

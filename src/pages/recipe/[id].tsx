@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { recipeSchema, RecipeFormValues } from '@/utils/schema';
@@ -22,6 +22,7 @@ export default function Recipe() {
   const [updateRecipe] = useUpdateRecipeMutation();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [imgSrc, setImgSrc] = useState('/svgs/image.svg');
 
   const {
     register,
@@ -43,6 +44,7 @@ export default function Recipe() {
     },
   });
 
+  // Reset form + image preview on load
   useEffect(() => {
     if (recipe) {
       reset({
@@ -54,16 +56,27 @@ export default function Recipe() {
         instructions: recipe.instructions ?? '',
         image: recipe.image ?? '',
       });
+
+      if (recipe.image && typeof recipe.image === 'string') {
+        setImgSrc(recipe.image);
+      }
     }
   }, [recipe, reset]);
 
+  // Watch for file changes and generate preview
   const selectedImage = watch('image');
-  const imageUrl =
-    typeof selectedImage === 'string'
-      ? selectedImage
-      : selectedImage instanceof File
-      ? URL.createObjectURL(selectedImage)
-      : '/svgs/image.svg';
+
+  useEffect(() => {
+    if (selectedImage instanceof File) {
+      const objectUrl = URL.createObjectURL(selectedImage);
+      setImgSrc(objectUrl);
+      return () => URL.revokeObjectURL(objectUrl); // cleanup
+    } else if (typeof selectedImage === 'string') {
+      setImgSrc(selectedImage || '/svgs/image.svg');
+    } else {
+      setImgSrc('/svgs/image.svg');
+    }
+  }, [selectedImage]);
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -137,7 +150,10 @@ export default function Recipe() {
       <div className="flex flex-1 h-0">
         <aside className="w-[500px] p-8 space-y-6 transition-opacity duration-200">
           <div className="space-y-2">
-            <div className="flex space-x-1 items-center cursor-pointer" onClick={() => router.push('/')}>
+            <div
+              className="flex space-x-1 items-center cursor-pointer"
+              onClick={() => router.push('/')}
+            >
               <img src="/svgs/chevron-left.svg" alt="back" className="w-[26px] h-[26px]" />
               <p className="text-[36px] font-[400]">Back</p>
             </div>
@@ -151,19 +167,17 @@ export default function Recipe() {
             />
 
             <Image
-              src={imageUrl}
+              src={imgSrc}
               alt="preview"
               width={457}
               height={401}
               className="object-cover rounded w-[457px] h-[401px] cursor-pointer"
               onClick={handleImageClick}
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = '/svgs/image.svg';
-              }}
+              onError={() => setImgSrc('/svgs/image.svg')}
             />
           </div>
         </aside>
+
         <RecipeForm
           register={register}
           errors={errors}

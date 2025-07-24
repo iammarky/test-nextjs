@@ -37,6 +37,7 @@ export default function RecipeCard({
             src={imgSrc}
             alt={title}
             fill
+            sizes="(max-width: 768px) 100vw, 310px"
             className="object-cover rounded-l-[15px]"
             onError={() => setImgSrc('/svgs/image.svg')}
           />
