@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { recipeSchema, RecipeFormValues } from '@/utils/schema';
@@ -15,6 +16,7 @@ export default function Recipe() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<RecipeFormValues>({
     resolver: zodResolver(recipeSchema),
@@ -27,6 +29,19 @@ export default function Recipe() {
       instructions: recipe?.instructions ?? '',
     },
   });
+
+  useEffect(() => {
+    if (recipe) {
+      reset({
+        name: recipe.author ?? '',
+        email: recipe.email ?? '',
+        title: recipe.title ?? '',
+        description: recipe.description ?? '',
+        ingredients: recipe.ingredients ?? '',
+        instructions: recipe.instructions ?? '',
+      });
+    }
+  }, [recipe, reset]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading recipe</div>;
