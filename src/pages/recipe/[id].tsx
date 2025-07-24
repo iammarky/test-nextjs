@@ -4,13 +4,14 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { recipeSchema, RecipeFormValues } from '@/utils/schema';
 import { Header, RecipeForm } from '@/components';
+import Image from 'next/image';
 import { useGetRecipeByIdQuery, useDeleteRecipeMutation, useUpdateRecipeMutation, useAddRecipeMutation } from '@/redux';
 
 export default function Recipe() {
   const router = useRouter();
   const id = Array.isArray(router.query.id) ? router.query.id[0] : router.query.id;
   
-  const { data: recipe, isLoading, error } = useGetRecipeByIdQuery(id!, { skip: !id || id === 'create' });
+  const { data: recipe, error } = useGetRecipeByIdQuery(id!, { skip: !id || id === 'create' });
   const [deleteRecipe] = useDeleteRecipeMutation();
   const [addRecipe] = useAddRecipeMutation();
   const [updateRecipe] = useUpdateRecipeMutation();
@@ -45,7 +46,6 @@ export default function Recipe() {
     }
   }, [recipe, reset]);
 
-  if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading recipe</div>;
 
   const onSubmit = async (data: RecipeFormValues) => {
@@ -96,11 +96,18 @@ export default function Recipe() {
               <img src="/chevron-left.svg" alt="back" className="w-[26px] h-[26px]" />
               <p className="text-[36px] font-[400]">Back</p>
             </div>
-            <img
+            <Image
               src={recipe?.image || '/image.svg'}
               alt="preview"
-              className="w-[457px] h-[401px] object-cover rounded"
+              width={457}
+              height={401}
+              className="object-cover rounded w-[457px] h-[401px]"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = '/image.svg';
+              }}
             />
+
           </div>
         </aside>
         <RecipeForm
