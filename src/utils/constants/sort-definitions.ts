@@ -10,7 +10,7 @@ export const filterOptions = [
 
 export const sortConfig = [
   { key: 'title', label: 'Sort by Title' },
-  { key: 'author', label: 'Sort by Author' },
+  { key: 'name', label: 'Sort by Name' },
   { key: 'date', label: 'Sort by Date' },
 ] as const;
 

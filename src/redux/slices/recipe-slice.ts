@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type RecipesState = {
-  sort: Partial<Record<'title' | 'author' | 'date', 'asc' | 'desc'>>;
+  sort: Partial<Record<'title' | 'name' | 'date', 'asc' | 'desc'>>;
   filter: 'yes' | 'no' | '';
   search: string;
 };

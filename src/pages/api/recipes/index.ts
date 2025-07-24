@@ -22,13 +22,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const {
       title,
       description,
-      author,
+      name,
       email,
       ingredients,
       instructions,
     } = req.body;
 
-    if (!title || !description || !author || !email || !ingredients || !instructions) {
+    if (!title || !description || !name || !email || !ingredients || !instructions) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
@@ -38,7 +38,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       isFavorite: false,
       title,
       description,
-      author,
+      name,
       email,
       ingredients,
       instructions,

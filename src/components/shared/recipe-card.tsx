@@ -7,7 +7,7 @@ type RecipeCardProps = {
   isFavorite: boolean;
   title: string;
   description: string;
-  author: string;
+  name: string;
   createdAt: string;
 };
 
@@ -17,7 +17,7 @@ export default function RecipeCard({
   isFavorite,
   title,
   description,
-  author,
+  name,
   createdAt,
 }: RecipeCardProps) {
   const [patchFavorite] = usePatchFavoriteMutation();
@@ -66,8 +66,8 @@ export default function RecipeCard({
               </p>
             )}
             <div className="flex justify-between text-[15px] font-semibold">
-              {author && (
-                <span>Added by: {author}</span>
+              {name && (
+                <span>Added by: {name}</span>
               )}
               {createdAt && (
                 <span>Date: {createdAt}</span>

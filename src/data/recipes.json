@@ -5,10 +5,22 @@
     "isFavorite": false,
     "title": "Sample Chicken Currys",
     "description": "Delicious Filipino-style chicken curry.",
-    "author": "Mark",
+    "name": "Mark",
     "email": "mark@gmail.coms",
     "ingredients": "• 1kg chicken pieces\n• 2 potatoes, cubed\n• 1 carrot, sliced\n• 1 bell pepper, sliced\n• 1 can coconut milk\n• 2 tbsp curry powder\n• 3 cloves garlic, minced\n• 1 onion, chopped\n• Salt and pepper to taste",
     "instructions": "1. Sauté garlic and onion.\n2. Add chicken and cook until lightly browned.\n3. Stir in curry powder and cook for 2 minutes.\n4. Add coconut milk, potatoes, and carrots.\n5. Simmer until vegetables are tender.\n6. Add bell pepper and season with salt and pepper.\n7. Simmer for 5 more minutes.\n8. Serve hot with rice.",
     "createdAt": "July 23, 2025"
+  },
+  {
+    "id": "d3ae564d-7d15-4d72-a14e-2251a0c1e454",
+    "image": "",
+    "isFavorite": false,
+    "title": "Test",
+    "description": "Test",
+    "name": "Mark",
+    "email": "mfrancissaldivar@gmail.com",
+    "ingredients": "Test",
+    "instructions": "Test",
+    "createdAt": "2025-07-24T09:59:19.077Z"
   }
 ]

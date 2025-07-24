@@ -4,7 +4,7 @@ interface Recipe {
   isFavorite: boolean;
   title: string;
   description: string;
-  author: string;
+  name: string;
   createdAt: string;
   [key: string]: any;
 };

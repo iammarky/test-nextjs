@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { recipeSchema, RecipeFormValues } from '@/utils/schema';
 import { Header, RecipeForm } from '@/components';
-import { useGetRecipeByIdQuery, useDeleteRecipeMutation, useUpdateRecipeMutation } from '@/redux';
+import { useGetRecipeByIdQuery, useDeleteRecipeMutation, useUpdateRecipeMutation, useAddRecipeMutation } from '@/redux';
 
 export default function Recipe() {
   const router = useRouter();
@@ -12,6 +12,7 @@ export default function Recipe() {
   
   const { data: recipe, isLoading, error } = useGetRecipeByIdQuery(id!, { skip: !id || id === 'create' });
   const [deleteRecipe] = useDeleteRecipeMutation();
+  const [addRecipe] = useAddRecipeMutation();
   const [updateRecipe] = useUpdateRecipeMutation();
 
   const {
@@ -22,7 +23,7 @@ export default function Recipe() {
   } = useForm<RecipeFormValues>({
     resolver: zodResolver(recipeSchema),
     defaultValues: {
-      name: recipe?.author ?? '',
+      name: recipe?.name ?? '',
       email: recipe?.email ?? '',
       title: recipe?.title ?? '',
       description: recipe?.description ?? '',
@@ -34,7 +35,7 @@ export default function Recipe() {
   useEffect(() => {
     if (recipe) {
       reset({
-        name: recipe.author ?? '',
+        name: recipe.name ?? '',
         email: recipe.email ?? '',
         title: recipe.title ?? '',
         description: recipe.description ?? '',
@@ -49,7 +50,15 @@ export default function Recipe() {
 
   const onSubmit = async (data: RecipeFormValues) => {
     if(!id || id === 'create') {
-      console.log('Create')
+      console.log(data)
+      try {
+        await addRecipe(data).unwrap();
+        alert('Recipe created successfully');
+        router.push('/');
+      } catch (error) {
+        console.error('Failed to create recipe:', error);
+        alert('Failed to create the recipe.');
+      }
     } else {
       try {
         await updateRecipe({ id, updates: data }).unwrap();

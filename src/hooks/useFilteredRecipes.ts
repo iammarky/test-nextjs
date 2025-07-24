@@ -24,7 +24,7 @@ export function useFilteredRecipes({ recipes, filter, sortState, searchTerm = ''
       const lower = searchTerm.trim().toLowerCase();
       result = result.filter((r) =>
         r.title.toLowerCase().includes(lower) ||
-        r.author.toLowerCase().includes(lower)
+        r.name.toLowerCase().includes(lower)
       );
     }
 

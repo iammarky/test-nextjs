@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { Recipe } from '@/utils/interface';
+import type { RecipeFormValues } from '@/utils/schema';
 
 export const recipeApi = createApi({
   reducerPath: 'recipeApi',
@@ -14,13 +15,12 @@ export const recipeApi = createApi({
       query: (id) => `recipes/${id}`,
       providesTags: ['Recipe'],
     }),
-    addRecipe: builder.mutation<Recipe, FormData>({
-      query: (formData) => ({
+    addRecipe: builder.mutation<Recipe, RecipeFormValues>({
+      query: (data) => ({
         url: 'recipes',
         method: 'POST',
-        body: formData,
+        body: data,
       }),
-      invalidatesTags: ['Recipe'],
     }),
     updateRecipe: builder.mutation<Recipe, { id: string; updates: Partial<Recipe> }>({
       query: ({ id, updates }) => ({

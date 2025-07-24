@@ -32,7 +32,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       const {
         title,
         description,
-        author,
+        name,
         email,
         image,
         isFavorite,
@@ -51,7 +51,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         ...recipes[index],
         ...(title && { title }),
         ...(description && { description }),
-        ...(author && { author }),
+        ...(name && { name }),
         ...(email && { email }),
         ...(image && { image }),
         ...(typeof isFavorite === 'boolean' && { isFavorite }),
