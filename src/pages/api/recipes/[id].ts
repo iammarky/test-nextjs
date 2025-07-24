@@ -53,7 +53,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
       let imagePath = recipes[index].image ?? '';
 
-      // Handle base64 image (new image upload)
+      // Handle base64 image (new upload)
       if (typeof image === 'string' && image.startsWith('data:image')) {
         const matches = image.match(/^data:(image\/[a-zA-Z]+);base64,(.+)$/);
         if (!matches) {
@@ -65,13 +65,31 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         const buffer = Buffer.from(base64Data, 'base64');
 
         const safeTitle = sanitizeTitle(title || recipes[index].title) || uuidv4();
-        const filename = `${safeTitle}-${Date.now()}.${ext}`;
+        const filename = `${safeTitle}.${ext}`;
+        const newImagePath = `/images/${filename}`;
         const filepath = path.join(uploadDir, filename);
 
+        // 🔥 Delete old image if it's different
+        if (
+          recipes[index].image &&
+          recipes[index].image.startsWith('/images/') &&
+          recipes[index].image !== newImagePath
+        ) {
+          const oldImagePath = path.join(uploadDir, path.basename(recipes[index].image));
+          if (fs.existsSync(oldImagePath)) {
+            try {
+              fs.unlinkSync(oldImagePath);
+            } catch (err) {
+              console.warn(`Failed to delete old image: ${oldImagePath}`, err);
+            }
+          }
+        }
+
+        // 🆕 Save (or overwrite) image
         fs.writeFileSync(filepath, buffer);
-        imagePath = `/images/${filename}`;
+        imagePath = newImagePath;
       } else if (typeof image === 'string' && image.startsWith('/images/')) {
-        // keep existing URL-based path
+        // Keep existing image if not changed
         imagePath = image;
       }
 
@@ -113,16 +131,33 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     case 'DELETE': {
       const recipes = readData();
-      const newRecipes = recipes.filter(r => r.id !== id);
+      const index = recipes.findIndex(r => r.id === id);
 
-      if (newRecipes.length === recipes.length) {
+      if (index === -1) {
         return res.status(404).json({ error: 'Recipe not found' });
       }
 
+      const recipeToDelete = recipes[index];
+
+      // 🔥 Delete image file if applicable
+      if (recipeToDelete.image && recipeToDelete.image.startsWith('/images/')) {
+        const imageFilePath = path.join(uploadDir, path.basename(recipeToDelete.image));
+        if (fs.existsSync(imageFilePath)) {
+          try {
+            fs.unlinkSync(imageFilePath);
+          } catch (err) {
+            console.warn(`Failed to delete image: ${imageFilePath}`, err);
+          }
+        }
+      }
+
+      // Remove the recipe
+      const newRecipes = [...recipes.slice(0, index), ...recipes.slice(index + 1)];
       writeData(newRecipes);
+
       return res.status(200).json({ success: true });
     }
-
+    
     default:
       return res.status(405).json({ error: 'Method not allowed' });
   }
