@@ -171,7 +171,7 @@ export default function Recipe() {
               alt="preview"
               width={457}
               height={401}
-              className="object-cover rounded w-[457px] h-[401px] cursor-pointer"
+              className="object-cover rounded cursor-pointer"
               onClick={handleImageClick}
               onError={() => setImgSrc('/svgs/image.svg')}
             />

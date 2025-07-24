@@ -40,6 +40,7 @@ export default function RecipeCard({
             sizes="(max-width: 768px) 100vw, 310px"
             className="object-cover rounded-l-[15px]"
             onError={() => setImgSrc('/svgs/image.svg')}
+            priority
           />
           <Image
             src={isFavorite ? '/svgs/star-filled.svg' : '/svgs/star.svg'}
@@ -52,6 +53,7 @@ export default function RecipeCard({
               toggleFavorite();
             }}
             className="absolute top-2 right-2 cursor-pointer"
+            priority
           />
         </div>
 
