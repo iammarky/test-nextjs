@@ -8,6 +8,7 @@ export const recipeSchema = z.object({
   description: z.string().min(1, 'Description is required'),
   ingredients: z.string().min(1, 'Ingredients are required'),
   instructions: z.string().min(1, 'Instructions are required'),
+  image: z.union([z.instanceof(File), z.string()]).optional(), 
 });
 
 export type RecipeFormValues = z.infer<typeof recipeSchema>;

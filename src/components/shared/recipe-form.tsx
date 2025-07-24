@@ -1,8 +1,8 @@
+import { useRouter } from 'next/router';
 import { TextField, TextArea } from '@/components';
 import { UseFormRegister, FieldErrors, SubmitHandler } from 'react-hook-form';
 import { RecipeFormValues } from '@/utils/schema';
 import { recipeTextFields, recipeTextAreas  } from '@/utils/constants';
-
 
 interface RecipeFormProps {
   register: UseFormRegister<RecipeFormValues>;
@@ -19,6 +19,8 @@ export default function RecipeForm({
   onSubmit,
   onDelete
 }: RecipeFormProps) {
+  const router = useRouter();
+  const isCreateMode = router.query.id === 'create';
   return (
     <section className="relative flex-1 w-full p-8">
       <div className="h-full p-5 overflow-auto hide-scrollbar">
@@ -48,13 +50,15 @@ export default function RecipeForm({
           ))}
 
           <div className="flex justify-end space-x-2">
-            <button
-              type="button"
-              className="px-[24px] h-[36px] bg-[#EE6400] text-white rounded-[4px]"
-              onClick={onDelete}
-            >
-              Delete
-            </button>
+            {!isCreateMode && (
+              <button
+                type="button"
+                className="px-[24px] h-[36px] bg-[#EE6400] text-white rounded-[4px]"
+                onClick={onDelete}
+              >
+                Delete
+              </button>
+            )}
             <button
               type="submit"
               className="px-[24px] h-[36px] bg-[#435490] text-white rounded-[4px]"

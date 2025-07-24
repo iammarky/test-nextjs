@@ -1,35 +1,45 @@
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { recipeSchema, RecipeFormValues } from '@/utils/schema';
 import { Header, RecipeForm } from '@/components';
 import Image from 'next/image';
-import { useGetRecipeByIdQuery, useDeleteRecipeMutation, useUpdateRecipeMutation, useAddRecipeMutation } from '@/redux';
+import {
+  useGetRecipeByIdQuery,
+  useDeleteRecipeMutation,
+  useUpdateRecipeMutation,
+  useAddRecipeMutation,
+} from '@/redux';
 
 export default function Recipe() {
   const router = useRouter();
   const id = Array.isArray(router.query.id) ? router.query.id[0] : router.query.id;
-  
+
   const { data: recipe, error } = useGetRecipeByIdQuery(id!, { skip: !id || id === 'create' });
   const [deleteRecipe] = useDeleteRecipeMutation();
   const [addRecipe] = useAddRecipeMutation();
   const [updateRecipe] = useUpdateRecipeMutation();
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<RecipeFormValues>({
     resolver: zodResolver(recipeSchema),
     defaultValues: {
-      name: recipe?.name ?? '',
-      email: recipe?.email ?? '',
-      title: recipe?.title ?? '',
-      description: recipe?.description ?? '',
-      ingredients: recipe?.ingredients ?? '',
-      instructions: recipe?.instructions ?? '',
+      name: '',
+      email: '',
+      title: '',
+      description: '',
+      ingredients: '',
+      instructions: '',
+      image: '',
     },
   });
 
@@ -42,38 +52,71 @@ export default function Recipe() {
         description: recipe.description ?? '',
         ingredients: recipe.ingredients ?? '',
         instructions: recipe.instructions ?? '',
+        image: recipe.image ?? '',
       });
     }
   }, [recipe, reset]);
 
-  if (error) return <div>Error loading recipe</div>;
+  const selectedImage = watch('image');
+  const imageUrl =
+    typeof selectedImage === 'string'
+      ? selectedImage
+      : selectedImage instanceof File
+      ? URL.createObjectURL(selectedImage)
+      : '/svgs/image.svg';
+
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      setValue('image', file, { shouldValidate: true });
+    }
+  };
 
   const onSubmit = async (data: RecipeFormValues) => {
-    if(!id || id === 'create') {
-      console.log(data)
-      try {
-        await addRecipe(data).unwrap();
-        alert('Recipe created successfully');
-        router.push('/');
-      } catch (error) {
-        console.error('Failed to create recipe:', error);
-        alert('Failed to create the recipe.');
-      }
+    const payload: any = {
+      name: data.name,
+      email: data.email,
+      title: data.title,
+      description: data.description,
+      ingredients: data.ingredients,
+      instructions: data.instructions,
+    };
+
+    if (data.image instanceof File) {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        payload.image = reader.result;
+        await submitRecipe(payload);
+      };
+      reader.readAsDataURL(data.image);
     } else {
-      try {
-        await updateRecipe({ id, updates: data }).unwrap();
-        alert('Recipe updated successfully');
-        router.push('/');
-      } catch (error) {
-        console.error('Failed to update recipe:', error);
-        alert('Failed to update the recipe.');
+      payload.image = data.image;
+      await submitRecipe(payload);
+    }
+  };
+
+  const submitRecipe = async (payload: any) => {
+    try {
+      if (!id || id === 'create') {
+        await addRecipe(payload).unwrap();
+        alert('Recipe created!');
+      } else {
+        await updateRecipe({ id, updates: payload }).unwrap();
+        alert('Recipe updated!');
       }
+      router.push('/');
+    } catch (error) {
+      console.error(error);
+      alert('Failed to save recipe');
     }
   };
 
   const onDelete = async () => {
     if (!id) return;
-
     const confirmed = window.confirm('Are you sure you want to delete this recipe?');
     if (!confirmed) return;
 
@@ -86,6 +129,8 @@ export default function Recipe() {
     }
   };
 
+  if (error) return <div>Error loading recipe</div>;
+
   return (
     <main className="h-screen w-screen flex flex-col bg-[#EBEBEB] overflow-hidden">
       <Header />
@@ -96,18 +141,27 @@ export default function Recipe() {
               <img src="/svgs/chevron-left.svg" alt="back" className="w-[26px] h-[26px]" />
               <p className="text-[36px] font-[400]">Back</p>
             </div>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageChange}
+            />
+
             <Image
-              src={recipe?.image || '/svgs/image.svg'}
+              src={imageUrl}
               alt="preview"
               width={457}
               height={401}
-              className="object-cover rounded w-[457px] h-[401px]"
+              className="object-cover rounded w-[457px] h-[401px] cursor-pointer"
+              onClick={handleImageClick}
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.src = '/svgs/image.svg';
               }}
             />
-
           </div>
         </aside>
         <RecipeForm
