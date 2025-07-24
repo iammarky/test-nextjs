@@ -20,9 +20,7 @@ const RecipeList = ({ recipes }: { recipes: Recipe[] }) => {
         ) : (
           <div className="h-full overflow-auto hide-scrollbar space-y-4 pr-1">
             {recipes.map((recipe) => (
-              <Link key={recipe.id} href={`/recipe/${recipe.id}`}>
-                <RecipeCard {...recipe} />
-              </Link>
+              <RecipeCard key={recipe.id} {...recipe} />
             ))}
           </div>
         )}

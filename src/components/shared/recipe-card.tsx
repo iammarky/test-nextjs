@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { usePatchFavoriteMutation } from '@/redux';
 import { getImgSrc } from '@/utils/helpers';
+import Link from 'next/link';
 
 type RecipeCardProps = {
   id: string;
@@ -34,15 +35,17 @@ export default function RecipeCard({
       <div className="flex h-[223px] w-full overflow-hidden rounded-[15px] border border-black bg-white shadow-md">
         {/* Left image section */}
         <div className="relative w-[310px] h-full">
-          <Image
-            src={getImgSrc(imgSrc)}
-            alt={title}
-            fill
-            sizes="(max-width: 768px) 100vw, 310px"
-            className="object-cover rounded-l-[15px]"
-            onError={() => setImgSrc('/svgs/image.svg')}
-            priority
-          />
+          <Link href={`/recipe/${id}`}>
+            <Image
+              src={getImgSrc(imgSrc)}
+              alt={title}
+              fill
+              sizes="(max-width: 768px) 100vw, 310px"
+              className="object-cover rounded-l-[15px]"
+              onError={() => setImgSrc('/svgs/image.svg')}
+              priority
+            />
+          </Link>
           <Image
             src={isFavorite ? '/svgs/star-filled.svg' : '/svgs/star.svg'}
             alt="Favorite"
@@ -69,9 +72,11 @@ export default function RecipeCard({
 
           <div className="space-y-2">
             {id && (
-              <p className="cursor-pointer text-[12px] font-semibold">
-                See more
-              </p>
+              <Link href={`/recipe/${id}`}>
+                <p className="cursor-pointer text-[12px] font-semibold hover:underline">
+                  See more
+                </p>
+              </Link>
             )}
             <div className="flex justify-between text-[15px] font-semibold">
               {name && <span>Added by: {name}</span>}
