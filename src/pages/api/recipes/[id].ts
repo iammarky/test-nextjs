@@ -27,8 +27,19 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
       return res.status(200).json(recipe);
     }
+
     case 'PUT': {
-      const { title, description, author, image, isFavorite } = req.body;
+      const {
+        title,
+        description,
+        author,
+        email,
+        image,
+        isFavorite,
+        ingredients,
+        instructions,
+      } = req.body;
+
       const recipes = readData();
       const index = recipes.findIndex(r => r.id === id);
 
@@ -41,8 +52,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         ...(title && { title }),
         ...(description && { description }),
         ...(author && { author }),
+        ...(email && { email }),
         ...(image && { image }),
         ...(typeof isFavorite === 'boolean' && { isFavorite }),
+        ...(ingredients && { ingredients }),
+        ...(instructions && { instructions }),
       };
 
       recipes[index] = updated;

@@ -2,10 +2,13 @@
   {
     "id": "6a1c865f-7775-4654-a170-bb3c97e4aca5",
     "image": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/chicken_curry_61994_16x9.jpg",
-    "isFavorite": true,
+    "isFavorite": false,
     "title": "Sample Chicken Curry",
     "description": "Delicious Filipino-style chicken curry.",
     "author": "Mark",
+    "email": "mark@example.com",
+    "ingredients": "• 1kg chicken pieces\n• 2 potatoes, cubed\n• 1 carrot, sliced\n• 1 bell pepper, sliced\n• 1 can coconut milk\n• 2 tbsp curry powder\n• 3 cloves garlic, minced\n• 1 onion, chopped\n• Salt and pepper to taste",
+    "instructions": "1. Sauté garlic and onion.\n2. Add chicken and cook until lightly browned.\n3. Stir in curry powder and cook for 2 minutes.\n4. Add coconut milk, potatoes, and carrots.\n5. Simmer until vegetables are tender.\n6. Add bell pepper and season with salt and pepper.\n7. Simmer for 5 more minutes.\n8. Serve hot with rice.",
     "createdAt": "July 23, 2025"
   }
 ]
