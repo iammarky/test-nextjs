@@ -1,40 +1,85 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🥗 Test Next.js Recipe App
 
-## Getting Started
+A simple recipe management app built with **Next.js**, **TypeScript**, and **Redux Toolkit**. Users can view, create, edit, and delete recipes. Images are uploaded and stored in the public folder, and data is saved locally in a JSON file.
 
-First, run the development server:
+## 🚀 Features
+
+- ✅ View a list of recipes
+- ➕ Create a new recipe with image upload
+- ✏️ Edit existing recipes
+- ❌ Delete recipes
+- 🔍 Filter and sort by title or favorite
+- ⭐ Mark recipes as favorite
+
+## 📦 Tech Stack
+
+- [Next.js 14](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Redux Toolkit + RTK Query](https://redux-toolkit.js.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [React Hook Form](https://react-hook-form.com/)
+- [Zod](https://github.com/colinhacks/zod)
+
+## 🧑‍🍳 Getting Started
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/iammarky/test-nextjs.git
+cd test-nextjs
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## 📁 Project Structure
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+```
+.
+├── app/                  # App router pages
+├── components/           # Reusable UI components
+│   ├── core/
+│   └── shared/
+├── public/images/        # Uploaded recipe images
+├── redux/                # Redux Toolkit setup
+│   ├── services/
+│   └── slices/
+├── src/data/             # Local JSON database
+│   └── recipes.json
+├── styles/               # Global styles
+│   └── globals.css
+├── utils/                # Schema, types, and helpers
+│   ├── constants/
+│   ├── helpers/
+│   ├── interface/
+│   └── schema/
+├── tailwind.config.js
+├── postcss.config.js
+├── tsconfig.json
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## 📝 API Routes
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+All API logic is handled under `/pages/api/recipes`:
 
-## Learn More
+- `GET /api/recipes` - fetch all recipes
+- `POST /api/recipes` - create a recipe
+- `PATCH /api/recipes/:id` - update a recipe
+* `PATCH /api/recipes/:id` - mark or unmarked recipe as favorite
+- `DELETE /api/recipes/:id` - delete a recipe
 
-To learn more about Next.js, take a look at the following resources:
+## 📌 Notes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Uploaded images are saved to `public/images` and must be manually cleaned if needed.
+- Data is stored in `src/data/recipes.json`.
