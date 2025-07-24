@@ -10,9 +10,15 @@ const uploadDir = path.join(process.cwd(), 'public/images');
 fs.mkdirSync(uploadDir, { recursive: true });
 
 function readData(): Recipe[] {
-  const fileData = fs.readFileSync(dataPath, 'utf-8');
-  return JSON.parse(fileData);
+  try {
+    const fileData = fs.readFileSync(dataPath, 'utf-8');
+    return fileData.trim() ? JSON.parse(fileData) : [];
+  } catch (err) {
+    console.error('Failed to read or parse data.json:', err);
+    return [];
+  }
 }
+
 
 function writeData(data: Recipe[]) {
   fs.writeFileSync(dataPath, JSON.stringify(data, null, 2));

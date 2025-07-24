@@ -17,7 +17,15 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).json({ error: 'Invalid ID' });
   }
 
-  const readData = () => JSON.parse(fs.readFileSync(dataPath, 'utf-8')) as Recipe[];
+  function readData(): Recipe[] {
+    try {
+      const fileData = fs.readFileSync(dataPath, 'utf-8');
+      return fileData.trim() ? JSON.parse(fileData) : [];
+    } catch (err) {
+      console.error('Failed to read or parse data.json:', err);
+      return [];
+    }
+  }
   const writeData = (data: Recipe[]) => fs.writeFileSync(dataPath, JSON.stringify(data, null, 2));
 
   switch (req.method) {

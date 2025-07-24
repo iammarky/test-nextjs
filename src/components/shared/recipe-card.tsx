@@ -25,6 +25,13 @@ export default function RecipeCard({
 }: RecipeCardProps) {
   const [patchFavorite] = usePatchFavoriteMutation();
   const [imgSrc, setImgSrc] = useState(image || '/svgs/image.svg');
+  const formattedDate = new Date(createdAt)
+    .toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }
+  )
 
   const toggleFavorite = () => {
     patchFavorite({ id, isFavorite: !isFavorite });
@@ -80,7 +87,7 @@ export default function RecipeCard({
             )}
             <div className="flex justify-between text-[15px] font-semibold">
               {name && <span>Added by: {name}</span>}
-              {createdAt && <span>Date: {createdAt}</span>}
+              {createdAt && <span>Date: {formattedDate}</span>}
             </div>
           </div>
         </div>
