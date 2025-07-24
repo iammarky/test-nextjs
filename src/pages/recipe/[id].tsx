@@ -139,8 +139,6 @@ export default function Recipe() {
     }
   };
 
-
-
   const onDelete = async () => {
     if (!id) return;
     const confirmed = window.confirm('Are you sure you want to delete this recipe?');

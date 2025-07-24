@@ -55,6 +55,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       });
     }
 
+    if(!image) {
+      return res.status(400).json({
+        message: 'Image is required',
+      });
+    }
+
     let imagePath = '';
 
     // Handle base64 image
