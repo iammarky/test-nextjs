@@ -93,18 +93,18 @@ export default function Recipe() {
         <aside className="w-[500px] p-8 space-y-6 transition-opacity duration-200">
           <div className="space-y-2">
             <div className="flex space-x-1 items-center cursor-pointer" onClick={() => router.push('/')}>
-              <img src="/chevron-left.svg" alt="back" className="w-[26px] h-[26px]" />
+              <img src="/svgs/chevron-left.svg" alt="back" className="w-[26px] h-[26px]" />
               <p className="text-[36px] font-[400]">Back</p>
             </div>
             <Image
-              src={recipe?.image || '/image.svg'}
+              src={recipe?.image || '/svgs/image.svg'}
               alt="preview"
               width={457}
               height={401}
               className="object-cover rounded w-[457px] h-[401px]"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                target.src = '/image.svg';
+                target.src = '/svgs/image.svg';
               }}
             />
 

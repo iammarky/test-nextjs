@@ -22,7 +22,7 @@ export default function RecipeCard({
   createdAt,
 }: RecipeCardProps) {
   const [patchFavorite] = usePatchFavoriteMutation();
-  const [imgSrc, setImgSrc] = useState(image || '/image.svg');
+  const [imgSrc, setImgSrc] = useState(image || '/svgs/image.svg');
 
   const toggleFavorite = () => {
     patchFavorite({ id, isFavorite: !isFavorite });
@@ -38,10 +38,10 @@ export default function RecipeCard({
             alt={title}
             fill
             className="object-cover rounded-l-[15px]"
-            onError={() => setImgSrc('/image.svg')}
+            onError={() => setImgSrc('/svgs/image.svg')}
           />
           <Image
-            src={isFavorite ? '/star-filled.svg' : '/star.svg'}
+            src={isFavorite ? '/svgs/star-filled.svg' : '/svgs/star.svg'}
             alt="Favorite"
             width={29}
             height={29}

@@ -18,9 +18,9 @@ const borderMap: Record<ValidationStatus, string> = {
 };
 
 const iconMap: Record<ValidationStatus, string> = {
-  success: '/success.svg',
-  error: '/error.svg',
-  warning: '/warning.svg',
+  success: '/svgs/success.svg',
+  error: '/svgs/error.svg',
+  warning: '/svgs/warning.svg',
 };
 
 const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(

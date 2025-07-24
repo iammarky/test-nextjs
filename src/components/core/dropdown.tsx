@@ -45,10 +45,10 @@ export default function Dropdown<T extends string>({
       >
         <span>{selectedLabel}</span>
         { isOpen ? (
-          <img src="/chevron-up.svg" alt="chevron-up" className="w-6 h-6 ml-2" />
+          <img src="/svgs/chevron-up.svg" alt="chevron-up" className="w-6 h-6 ml-2" />
         ) :
         (
-          <img src="/chevron-down.svg" alt="chevron-down" className="w-6 h-6 ml-2" />
+          <img src="/svgs/chevron-down.svg" alt="chevron-down" className="w-6 h-6 ml-2" />
         )}
       </button>
 

@@ -7,7 +7,7 @@ const RecipeList = ({ recipes }: { recipes: Recipe[] }) => {
     <section className="relative flex-1 w-full p-8">
       <Link href="/recipe/create">
         <img
-          src="/plus.svg"
+          src="/svgs/plus.svg"
           alt="Add recipe"
           className="absolute top-12 right-12 w-[71px] h-[71px] z-10 cursor-pointer"
         />

@@ -9,7 +9,7 @@ type InputProps = {
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
-      iconSrc = '/search.svg',
+      iconSrc = '/svgs/search.svg',
       iconAlt = 'Search',
       className = '',
       ...rest
