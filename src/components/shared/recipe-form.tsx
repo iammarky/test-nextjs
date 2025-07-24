@@ -9,6 +9,7 @@ interface RecipeFormProps {
   errors: FieldErrors<RecipeFormValues>;
   handleSubmit: (onSubmit: SubmitHandler<RecipeFormValues>) => (e?: React.BaseSyntheticEvent) => void;
   onSubmit: SubmitHandler<RecipeFormValues>;
+  onDelete: () => void; 
 }
 
 export default function RecipeForm({
@@ -16,6 +17,7 @@ export default function RecipeForm({
   errors,
   handleSubmit,
   onSubmit,
+  onDelete
 }: RecipeFormProps) {
   return (
     <section className="relative flex-1 w-full p-8">
@@ -49,7 +51,7 @@ export default function RecipeForm({
             <button
               type="button"
               className="px-[24px] h-[36px] bg-[#EE6400] text-white rounded-[4px]"
-              onClick={() => console.log('Delete clicked')}
+              onClick={onDelete}
             >
               Delete
             </button>

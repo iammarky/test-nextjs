@@ -2,14 +2,15 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { recipeSchema, RecipeFormValues } from '@/utils/schema';
-import { Header, TextField, TextArea, RecipeForm } from '@/components';
-import { useGetRecipeByIdQuery } from '@/redux';
+import { Header, RecipeForm } from '@/components';
+import { useGetRecipeByIdQuery, useDeleteRecipeMutation } from '@/redux';
 
 export default function Recipe() {
   const router = useRouter();
   const id = Array.isArray(router.query.id) ? router.query.id[0] : router.query.id;
   
   const { data: recipe, isLoading, error } = useGetRecipeByIdQuery(id!, { skip: !id });
+  const [deleteRecipe] = useDeleteRecipeMutation();
 
   const {
     register,
@@ -35,6 +36,21 @@ export default function Recipe() {
     console.log(data);
   };
 
+  const onDelete = async () => {
+    if (!id) return;
+
+    const confirmed = window.confirm('Are you sure you want to delete this recipe?');
+    if (!confirmed) return;
+
+    try {
+      await deleteRecipe(id).unwrap();
+      router.push('/');
+    } catch (err) {
+      console.error('Failed to delete recipe:', err);
+      alert('Failed to delete the recipe.');
+    }
+  };
+
   return (
     <main className="h-screen w-screen flex flex-col bg-[#EBEBEB] overflow-hidden">
       <Header />
@@ -57,6 +73,7 @@ export default function Recipe() {
           errors={errors}
           handleSubmit={handleSubmit}
           onSubmit={onSubmit}
+          onDelete={onDelete}
         />
       </div>
     </main>
