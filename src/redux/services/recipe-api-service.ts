@@ -28,7 +28,7 @@ export const recipeApi = createApi({
     }),
     patchFavorite: builder.mutation<Recipe, { id: string; isFavorite: boolean }>({
       query: ({ id, isFavorite }) => ({
-        url: `recipe/${id}`,
+        url: `recipes/${id}`,
         method: 'PATCH',
         body: { isFavorite },
       }),

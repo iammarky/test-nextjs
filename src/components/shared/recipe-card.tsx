@@ -1,4 +1,5 @@
 import React from 'react';
+import { usePatchFavoriteMutation } from '@/redux/services';
 
 type RecipeCardProps = {
   id: string;
@@ -19,6 +20,12 @@ export default function RecipeCard({
   author,
   createdAt,
 }: RecipeCardProps) {
+  const [patchFavorite] = usePatchFavoriteMutation();
+
+  const toggleFavorite = () => {
+    patchFavorite({ id, isFavorite: !isFavorite });
+  };
+
   return (
     <div className='p-5 border-b border-[#435490]'>
       <div className="flex h-[223px] w-full overflow-hidden rounded-[15px] border border-black bg-white shadow-md">
@@ -30,6 +37,11 @@ export default function RecipeCard({
             className="h-full w-[310px] object-cover"
           />
           <img
+            onClick={(e) => {
+              e.stopPropagation(); // stop the event from bubbling up to <Link>
+              e.preventDefault();  // prevent the navigation
+              toggleFavorite();
+            }}
             src={isFavorite ? '/star-filled.svg' : '/star.svg'}
             alt="Favorite"
             className="absolute top-2 right-2 w-[29px] h-[29px] cursor-pointer"
