@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'react-toastify';
 import { recipeSchema, RecipeFormValues } from '@/utils/schema';
 import { Header, RecipeForm } from '@/components';
 import {
@@ -30,6 +31,7 @@ export default function Recipe() {
     reset,
     setValue,
     watch,
+    setError,
     formState: { errors },
   } = useForm<RecipeFormValues>({
     resolver: zodResolver(recipeSchema),
@@ -43,7 +45,7 @@ export default function Recipe() {
       image: '',
     },
   });
-
+  
   // Reset form + image preview on load
   useEffect(() => {
     if (recipe) {
@@ -113,20 +115,31 @@ export default function Recipe() {
   };
 
   const submitRecipe = async (payload: any) => {
+    const isCreateMode = !id || id === 'create';
+
     try {
-      if (!id || id === 'create') {
+      if (isCreateMode) {
         await addRecipe(payload).unwrap();
-        alert('Recipe created!');
+        toast.success('Recipe added successfully!');
       } else {
         await updateRecipe({ id, updates: payload }).unwrap();
-        alert('Recipe updated!');
+        toast.success('Recipe updated successfully!');
       }
+
       router.push('/');
-    } catch (error) {
-      console.error(error);
-      alert('Failed to save recipe');
+    } catch (err: any) {
+      const field = err?.data?.field as keyof RecipeFormValues | undefined;
+      const hint = err?.data?.hint;
+
+      if (field && hint) {
+        setError(field, { type: 'manual', message: hint });
+      }
+
+      toast.error(err?.data?.message);
     }
   };
+
+
 
   const onDelete = async () => {
     if (!id) return;

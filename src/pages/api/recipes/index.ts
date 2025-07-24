@@ -39,6 +39,22 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
+    const recipes = readData();
+
+    // Check for unique title (case-insensitive)
+    const titleExists = recipes.some(
+      (r) => r.title.trim().toLowerCase() === title.trim().toLowerCase()
+    );
+
+    if (titleExists) {
+      return res.status(409).json({
+        message: 'A recipe with this title already exists',
+        code: 'TITLE_NOT_UNIQUE',
+        field: 'title',
+        hint: 'Title should be unique',
+      });
+    }
+
     let imagePath = '';
 
     // Handle base64 image
@@ -73,7 +89,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       createdAt: new Date().toISOString(),
     };
 
-    const recipes = readData();
     recipes.push(newRecipe);
     writeData(recipes);
 

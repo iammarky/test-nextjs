@@ -15,14 +15,26 @@
   {
     "id": "4df4d1e4-d26f-45b9-93c3-59da007c7937",
     "image": "/images/test.png",
-    "isFavorite": false,
+    "isFavorite": true,
     "title": "Test",
-    "description": "Test",
-    "name": "Test",
+    "description": "Tests",
+    "name": "Tests",
     "email": "test@test.test",
-    "ingredients": "Test",
-    "instructions": "Test",
+    "ingredients": "Tests",
+    "instructions": "Tests",
     "createdAt": "2025-07-24T11:43:17.346Z",
-    "updatedAt": "2025-07-24T12:19:27.110Z"
+    "updatedAt": "2025-07-24T13:11:23.691Z"
+  },
+  {
+    "id": "8ac38c5c-293f-40fc-9804-154beb7bac62",
+    "image": "/images/tests.png",
+    "isFavorite": false,
+    "title": "Tests",
+    "description": "tsas",
+    "name": "Mark",
+    "email": "mark@gmail.coms",
+    "ingredients": "tsast",
+    "instructions": "sas",
+    "createdAt": "2025-07-24T15:12:14.965Z"
   }
 ]
