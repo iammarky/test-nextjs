@@ -6,6 +6,7 @@ type ValidationStatus = 'success' | 'error' | 'warning';
 export interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   validation?: ValidationStatus;
+  errorMessage?: string;
 }
 
 const borderMap: Record<ValidationStatus, string> = {
@@ -21,7 +22,7 @@ const iconMap: Record<ValidationStatus, string> = {
 };
 
 const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
-  ({ label, validation, className = '', ...props }, ref) => {
+  ({ label, validation, errorMessage, className = '', ...props }, ref) => {
     const borderClass = validation ? borderMap[validation] : 'border-gray-300';
     const iconSrc = validation ? iconMap[validation] : null;
 
@@ -50,6 +51,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             />
           )}
         </div>
+        {validation === 'error' && errorMessage && (
+          <p className="mt-1 text-sm text-red-500">{errorMessage}</p>
+        )}
       </div>
     );
   }

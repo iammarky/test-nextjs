@@ -6,6 +6,7 @@ type ValidationStatus = 'success' | 'error' | 'warning';
 export interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   validation?: ValidationStatus;
+  errorMessage?: string;
   resizable?: boolean;
   height?: string | number; // can be Tailwind height class or inline px/rem
 }
@@ -23,7 +24,7 @@ const iconMap: Record<ValidationStatus, string> = {
 };
 
 const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  ({ label, validation, resizable = false, height, className = '', ...props }, ref) => {
+  ({ label, validation, errorMessage, resizable = false, height, className = '', ...props }, ref) => {
     const borderClass = validation ? borderMap[validation] : 'border-gray-300';
     const iconSrc = validation ? iconMap[validation] : null;
 
@@ -57,10 +58,13 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
               alt={`${validation} icon`}
               width={12}
               height={12}
-              className="absolute top-2 right-2"
+              className="absolute top-1/2 right-4 -translate-y-1/2"
             />
           )}
         </div>
+        {validation === 'error' && errorMessage && (
+          <p className="mt-1 text-sm text-red-500">{errorMessage}</p>
+        )}
       </div>
     );
   }
