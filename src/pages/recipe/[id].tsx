@@ -1,6 +1,6 @@
 // src/pages/recipe/[id].tsx
 import { useRouter } from 'next/router';
-import { Header, TextField } from '@/components';
+import { Header, TextField, TextArea } from '@/components';
 import { useGetRecipeByIdQuery } from '@/redux'
 
 export default function Recipe() {
@@ -27,7 +27,7 @@ export default function Recipe() {
           </div>
         </aside>
         <section className="relative flex-1 w-full p-8">
-          <div className="bg-white rounded-[10px] h-full p-5 shadow-md space-y-4">
+          <div className="h-full p-5 space-y-4 overflow-auto hide-scrollbar">
             <TextField
               label="YOUR NAME"
               type="name"
@@ -42,6 +42,24 @@ export default function Recipe() {
               label="Title"
               type="title"
               placeholder="Title"
+            />
+            <TextArea
+              label="Description"
+              placeholder="Description here"
+              resizable
+              height={75}
+            />
+            <TextArea
+              label="Ingredients"
+              placeholder="Ingredients here"
+              resizable
+              height={135}
+            />
+            <TextArea
+              label="Instructions"
+              placeholder="Instructions here"
+              resizable
+              height={135}
             />
           </div>
         </section>
