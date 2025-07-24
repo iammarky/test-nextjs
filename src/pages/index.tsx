@@ -26,6 +26,12 @@ export default function Home() {
           value={search}
           onChange={(e) => dispatch(setSearch(e.target.value))}
           placeholder="Search here..."
+          iconSrc={search?.trim() ? '/svgs/error.svg' : '/svgs/search.svg'}
+          onIconClick={() => {
+            if (search?.trim()) {
+              dispatch(setSearch(''));
+            }
+          }}
         />
       }/>
       <div className="flex flex-1 h-0">

@@ -3,14 +3,16 @@ import React, { forwardRef } from 'react';
 type InputProps = {
   iconSrc?: string;
   iconAlt?: string;
+  onIconClick?: () => void;
   className?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
-      iconSrc = '/svgs/search.svg',
+      iconSrc = '',
       iconAlt = 'Search',
+      onIconClick,
       className = '',
       ...rest
     },
@@ -26,7 +28,15 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           className="flex-1 bg-transparent outline-none text-lg placeholder-black"
           {...rest} // includes value, onChange, onKeyDown, onKeyPress, etc.
         />
-        <img src={iconSrc} alt={iconAlt} className="w-6 h-6" />
+        {iconSrc && (
+          <button
+            type="button"
+            onClick={onIconClick}
+            className="ml-2 p-1"
+          >
+            <img src={iconSrc} alt={iconAlt} className="w-6 h-6" />
+          </button>
+        )}
       </div>
     );
   }
