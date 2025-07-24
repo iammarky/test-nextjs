@@ -46,7 +46,6 @@ Then open [http://localhost:3000](http://localhost:3000) in your browser.
 ## 📁 Project Structure
 
 ```
-.
 ├── app/                  # App router pages
 ├── components/           # Reusable UI components
 │   ├── core/
@@ -76,7 +75,7 @@ All API logic is handled under `/pages/api/recipes`:
 - `GET /api/recipes` - fetch all recipes
 - `POST /api/recipes` - create a recipe
 - `PATCH /api/recipes/:id` - update a recipe
-* `PATCH /api/recipes/:id` - mark or unmarked recipe as favorite
+- `PATCH /api/recipes/:id` - mark or unmarked recipe as favorite
 - `DELETE /api/recipes/:id` - delete a recipe
 
 ## 📌 Notes
