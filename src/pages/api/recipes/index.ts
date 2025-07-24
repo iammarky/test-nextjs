@@ -101,7 +101,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       createdAt: new Date().toISOString(),
     };
 
-    recipes.push(newRecipe);
+    recipes.unshift(newRecipe);
     writeData(recipes);
 
     return res.status(201).json(newRecipe);
