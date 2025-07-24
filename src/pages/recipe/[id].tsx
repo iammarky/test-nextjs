@@ -16,6 +16,7 @@ import { getImgSrc } from '@/utils/helpers';
 export default function Recipe() {
   const router = useRouter();
   const id = Array.isArray(router.query.id) ? router.query.id[0] : router.query.id;
+  const isCreateMode = !id || id === 'create';
 
   const { data: recipe, error } = useGetRecipeByIdQuery(id!, { skip: !id || id === 'create' });
   const [deleteRecipe] = useDeleteRecipeMutation();
@@ -45,6 +46,9 @@ export default function Recipe() {
       image: '',
     },
   });
+
+  // Watch for file changes and generate preview
+  const selectedImage = watch('image');
   
   // Reset form + image preview on load
   useEffect(() => {
@@ -65,9 +69,7 @@ export default function Recipe() {
     }
   }, [recipe, reset]);
 
-  // Watch for file changes and generate preview
-  const selectedImage = watch('image');
-
+  // Update image preview
   useEffect(() => {
     if (selectedImage instanceof File) {
       const objectUrl = URL.createObjectURL(selectedImage);
@@ -80,9 +82,7 @@ export default function Recipe() {
     }
   }, [selectedImage]);
 
-  const handleImageClick = () => {
-    fileInputRef.current?.click();
-  };
+  const handleImageClick = () => fileInputRef.current?.click();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -114,9 +114,19 @@ export default function Recipe() {
     }
   };
 
-  const submitRecipe = async (payload: any) => {
-    const isCreateMode = !id || id === 'create';
+  const onDelete = async () => {
+    if (!id) return;
 
+    try {
+      await deleteRecipe(id).unwrap();
+      toast.success('Recipe was deleted successfully!');
+      router.push('/');
+    } catch (err) {
+      toast.error('Unable to delete recipe!');
+    }
+  };
+
+  const submitRecipe = async (payload: any) => {
     try {
       if (isCreateMode) {
         await addRecipe(payload).unwrap();
@@ -136,18 +146,6 @@ export default function Recipe() {
       }
 
       toast.error(err?.data?.message);
-    }
-  };
-
-  const onDelete = async () => {
-    if (!id) return;
-
-    try {
-      await deleteRecipe(id).unwrap();
-      toast.success('Recipe was deleted successfully!');
-      router.push('/');
-    } catch (err) {
-      toast.error('Unable to delete recipe!');
     }
   };
 
