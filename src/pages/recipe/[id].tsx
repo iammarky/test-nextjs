@@ -120,10 +120,10 @@ export default function Recipe() {
     try {
       if (isCreateMode) {
         await addRecipe(payload).unwrap();
-        toast.success('Recipe added successfully!');
+        toast.success('Recipe was added successfully!');
       } else {
         await updateRecipe({ id, updates: payload }).unwrap();
-        toast.success('Recipe updated successfully!');
+        toast.success('Recipe was updated successfully!');
       }
 
       router.push('/');
@@ -141,15 +141,13 @@ export default function Recipe() {
 
   const onDelete = async () => {
     if (!id) return;
-    const confirmed = window.confirm('Are you sure you want to delete this recipe?');
-    if (!confirmed) return;
 
     try {
       await deleteRecipe(id).unwrap();
+      toast.success('Recipe was deleted successfully!');
       router.push('/');
     } catch (err) {
-      console.error('Failed to delete recipe:', err);
-      alert('Failed to delete the recipe.');
+      toast.error('Unable to delete recipe!');
     }
   };
 
