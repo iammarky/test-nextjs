@@ -10,6 +10,10 @@ export const recipeApi = createApi({
       query: () => 'recipes',
       providesTags: ['Recipe'],
     }),
+    getRecipeById: builder.query<Recipe, string>({
+      query: (id) => `recipes/${id}`,
+      providesTags: ['Recipe'],
+    }),
     addRecipe: builder.mutation<Recipe, FormData>({
       query: (formData) => ({
         url: 'recipes',
@@ -46,6 +50,7 @@ export const recipeApi = createApi({
 
 export const {
   useGetRecipesQuery,
+  useGetRecipeByIdQuery,
   useAddRecipeMutation,
   useUpdateRecipeMutation,
   usePatchFavoriteMutation,

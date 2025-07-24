@@ -17,6 +17,16 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const writeData = (data: Recipe[]) => fs.writeFileSync(dataPath, JSON.stringify(data, null, 2));
 
   switch (req.method) {
+    case 'GET': {
+      const recipes = readData();
+      const recipe = recipes.find(r => r.id === id);
+
+      if (!recipe) {
+        return res.status(404).json({ error: 'Recipe not found' });
+      }
+
+      return res.status(200).json(recipe);
+    }
     case 'PUT': {
       const { title, description, author, image, isFavorite } = req.body;
       const recipes = readData();

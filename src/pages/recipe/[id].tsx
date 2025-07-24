@@ -1,11 +1,17 @@
 // src/pages/recipe/[id].tsx
 import { useRouter } from 'next/router';
-import { Header } from '@/components';
-
+import { Header, TextField } from '@/components';
+import { useGetRecipeByIdQuery } from '@/redux'
 
 export default function Recipe() {
   const router = useRouter();
-  const { id } = router.query;
+  const id = Array.isArray(router.query.id) ? router.query.id[0] : router.query.id;
+   const { data: recipe, isLoading, error } = useGetRecipeByIdQuery(id!, {
+    skip: !id,
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading recipe</div>;
 
   return (
     <main className="h-screen w-screen flex flex-col bg-[#EBEBEB] overflow-hidden">
@@ -21,7 +27,23 @@ export default function Recipe() {
           </div>
         </aside>
         <section className="relative flex-1 w-full p-8">
-          <div className="bg-white rounded-[10px] h-full p-5 shadow-md"></div>
+          <div className="bg-white rounded-[10px] h-full p-5 shadow-md space-y-4">
+            <TextField
+              label="YOUR NAME"
+              type="name"
+              placeholder="Name"
+            />
+            <TextField
+              label="EMAIL address"
+              type="email_address"
+              placeholder="Email address"
+            />
+            <TextField
+              label="Title"
+              type="title"
+              placeholder="Title"
+            />
+          </div>
         </section>
       </div>
     </main>

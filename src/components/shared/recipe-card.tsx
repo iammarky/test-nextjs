@@ -1,5 +1,5 @@
 import React from 'react';
-import { usePatchFavoriteMutation } from '@/redux/services';
+import { usePatchFavoriteMutation } from '@/redux';
 
 type RecipeCardProps = {
   id: string;

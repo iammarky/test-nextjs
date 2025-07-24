@@ -3,7 +3,7 @@ import { Header, Input, Sidebar, RecipeList } from '@/components';
 import { RootState, setSearch } from '@/redux/slices';
 import type { SortKey, SortOrder, YesNo } from '@/utils/constants';
 import { useFilteredRecipes } from '@/hooks/useFilteredRecipes';
-import {useGetRecipesQuery} from '@/redux/services'
+import {useGetRecipesQuery} from '@/redux'
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -18,7 +18,6 @@ export default function Home() {
     sortState: sortState as Partial<Record<SortKey, SortOrder>>,
     searchTerm: search,
   });
-  
 
   return (
     <main className="h-screen w-screen flex flex-col bg-[#EBEBEB] overflow-hidden">
