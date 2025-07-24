@@ -4,14 +4,15 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { recipeSchema, RecipeFormValues } from '@/utils/schema';
 import { Header, RecipeForm } from '@/components';
-import { useGetRecipeByIdQuery, useDeleteRecipeMutation } from '@/redux';
+import { useGetRecipeByIdQuery, useDeleteRecipeMutation, useUpdateRecipeMutation } from '@/redux';
 
 export default function Recipe() {
   const router = useRouter();
   const id = Array.isArray(router.query.id) ? router.query.id[0] : router.query.id;
   
-  const { data: recipe, isLoading, error } = useGetRecipeByIdQuery(id!, { skip: !id });
+  const { data: recipe, isLoading, error } = useGetRecipeByIdQuery(id!, { skip: !id || id === 'create' });
   const [deleteRecipe] = useDeleteRecipeMutation();
+  const [updateRecipe] = useUpdateRecipeMutation();
 
   const {
     register,
@@ -45,10 +46,20 @@ export default function Recipe() {
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading recipe</div>;
-  if (!recipe) return <div>Recipe not found</div>;
 
-  const onSubmit = (data: RecipeFormValues) => {
-    console.log(data);
+  const onSubmit = async (data: RecipeFormValues) => {
+    if(!id || id === 'create') {
+      console.log('Create')
+    } else {
+      try {
+        await updateRecipe({ id, updates: data }).unwrap();
+        alert('Recipe updated successfully');
+        router.push('/');
+      } catch (error) {
+        console.error('Failed to update recipe:', error);
+        alert('Failed to update the recipe.');
+      }
+    }
   };
 
   const onDelete = async () => {
@@ -77,7 +88,7 @@ export default function Recipe() {
               <p className="text-[36px] font-[400]">Back</p>
             </div>
             <img
-              src={recipe.image || '/image.svg'}
+              src={recipe?.image || '/image.svg'}
               alt="preview"
               className="w-[457px] h-[401px] object-cover rounded"
             />
